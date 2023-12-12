@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        title Recent Posts
+        include header.pug
+        include navbar.pug
+        h1 Recent Posts
+        table#recentposts
+            tr
+                th Name
+                th Email
+                th Date
+                th Department
+                th Subscription
+                th Delete
+                th Time Till
+            each post in recentposts
+                tr
+                    td= post.name
+                    td= post.email
+                    td= post.date
+                    td= post.department
+                    td= post.subscribe === 'yes' ? 'Yes' : 'No'
+                    td
+                        button.delete-btn(contact-id=post.id) Delete
+                    td#time-until= post.timeTill
