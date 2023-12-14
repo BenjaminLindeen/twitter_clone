@@ -1,6 +1,13 @@
 const express = require('express');
-const basicAuth = require('express-basic-auth');
-const {addContact, deleteContact, getContacts} = require('./data.js');
+const {
+    getTweet,
+    getRecentTweets,
+    getPopularTweets,
+    addTweet,
+    likeTweet,
+    editTweet,
+    deleteTweet
+} = require('./database.js');
 const app = express();
 const port = 4131;
 
@@ -8,47 +15,70 @@ app.use(express.urlencoded({extended: true}));
 app.use("/resources", express.static("resources"));
 app.use(express.json());
 
-app.set("views", "templates");
+app.set("views", "pug");
 app.set("view engine", "pug");
 
-const middleware = basicAuth({
-    users: {'admin': 'password'},
-    challenge: true
+app.get(["/", "/home"], (req, res) => {
+    res.render("home.pug");
 });
 
-app.get(["/", "/main"], (req, res) => {
-    res.render("mainpage.pug");
+app.get("/tweet", (req, res) => {
+    res.render("tweet.pug");
 });
 
-app.get("/contact", (req, res) => {
-    res.render("contactform.pug");
-});
-
-app.get("/recentposts", async (req, res) => {
+app.get("/recenttweets", async (req, res) => {
     try {
-        const recentposts = await getContacts();
+        const recenttweets = await getRecentTweets();
         const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
-        for (let i = 0; i < recentposts.length; i++) {
-            recentposts[i].date = dateFormatter.format(recentposts[i].date);
+        for (let i = 0; i < recenttweets.length; i++) {
+            recenttweets[i].date = dateFormatter.format(recenttweets[i].date);
         }
-        res.render("recentposts.pug", {recentposts});
+        res.render("recenttweets.pug", {recenttweets});
     } catch (err) {
         console.error(err);
-        res.status(500).send("Error retrieving contact log");
+        res.status(500).send("Error retrieving recent posts");
     }
 });
 
-app.post("/contact", async (req, res) => {
+app.get("/populartweets", async (req, res) => {
+    try {
+        const populartweets = await getPopularTweets();
+        const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+        for (let i = 0; i < populartweets.length; i++) {
+            populartweets[i].date = dateFormatter.format(populartweets[i].date);
+        }
+        res.render("populartweets.pug", {populartweets});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error retrieving popular posts");
+    }
+});
+
+app.get("/alltweets", async (req, res) => {
+    try {
+        const alltweets = await getTweet();
+        const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+        for (let i = 0; i < alltweets.length; i++) {
+            alltweets[i].date = dateFormatter.format(alltweets[i].date);
+        }
+        res.render("alltweets.pug", {alltweets});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error retrieving all posts");
+    }
+});
+
+app.post("/tweet", async (req, res) => {
     const formData = req.body;
-    if (!formData.name || !formData.email || !formData.date || !formData.department) {
+    if (!formData.inputField) {
         res.render("failure.pug");
         return;
     }
-    await addContact(formData.name, formData.email, formData.date, formData.department, formData.subscribe === 'yes');
-    res.render("success.pug");
+    await addTweet(formData.inputField);
+    res.redirect("/recenttweets");
 });
 
-app.delete("/api/contact/", middleware, async (req, res) => {
+app.put("/like/tweet", async (req, res) => {
     if (!req.is('json')) {
         res.status(400).send("Invalid Headers");
         return;
@@ -60,15 +90,67 @@ app.delete("/api/contact/", middleware, async (req, res) => {
         return;
     }
 
-    const contactIndex = data.id;
-    if (contactIndex === -1) {
+    const tweetIndex = data.id;
+    if (tweetIndex === -1) {
         res.status(404).send("Invalid ID");
         return;
     }
 
     try {
-        await deleteContact(contactIndex);
-        res.send("Contact deleted");
+        await likeTweet(tweetIndex);
+        res.send("Tweet liked");
+    } catch (err) {
+        res.status(500).send("Server Error");
+    }
+});
+
+app.put("/edit/tweet", async (req, res) => {
+    if (!req.is('json')) {
+        res.status(400).send("Invalid Headers");
+        return;
+    }
+
+    const data = req.body;
+    if (typeof data.id === 'undefined' || typeof data.tweet === 'undefined') {
+        res.status(400).send("ID or tweet not in JSON");
+        return;
+    }
+
+    const tweetIndex = data.id;
+    if (tweetIndex === -1) {
+        res.status(404).send("Invalid ID");
+        return;
+    }
+
+    try {
+        await editTweet(tweetIndex, data.tweet);
+        res.send("Tweet edited");
+    } catch (err) {
+        res.status(500).send("Server Error");
+    }
+});
+
+app.delete("/delete/tweet/", async (req, res) => {
+    if (!req.is('json')) {
+        res.status(400).send("Invalid Headers");
+        return;
+    }
+
+    const data = req.body;
+    if (typeof data.id === 'undefined') {
+        res.status(400).send("ID not in JSON");
+        return;
+    }
+
+    const tweetIndex = data.id;
+    if (tweetIndex === -1) {
+        res.status(404).send("Invalid ID");
+        return;
+    }
+
+    try {
+        await deleteTweet(tweetIndex);
+        res.send("Tweet deleted");
     } catch (err) {
         res.status(500).send("Server Error");
     }
@@ -77,7 +159,6 @@ app.delete("/api/contact/", middleware, async (req, res) => {
 app.use((req, res) => {
     res.status(404).render("404.pug");
 });
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

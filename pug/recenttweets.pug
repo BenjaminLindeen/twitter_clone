@@ -1,0 +1,33 @@
+doctype html
+html
+    head
+        title Recent Tweets
+        include header.pug
+        include navbar.pug
+        h1 Recent Tweets
+        include sort.pug
+        br
+        table#recenttweets
+            tr
+                th Posted
+                th Tweet
+                th Likes
+                th Like
+                th Edit
+                th Submit
+                th Delete
+            each post in recenttweets
+                tr
+                    td= post.date
+                    td= post.message
+                    td= post.likes
+                    td
+                        button.like-btn(tweet-id=post.id) Like
+                    td
+                        #edit-tweet
+                            form(action='tweet' method='put')
+                                input(type='text', id='tweet', name='inputField', maxlength='14')
+                    td
+                        button.edit-btn(tweet-id=post.id) Edit
+                    td
+                        button.delete-btn(tweet-id=post.id) Delete

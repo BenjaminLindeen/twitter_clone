@@ -3,192 +3,90 @@ body {
     font-family: 'Lucida Console', sans-serif;
     color: black;
     text-align: center;
-    margin: 0px 0px;
-    padding: 0px 0px;
+    margin: 0;
+    padding: 0;
 }
 
-#navbar {
+#navbar{
     background-color: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-#navbar a {
+#navbar a, #sort a {
     font-family: 'Lucida Console', sans-serif;
     color: white;
-    padding: 10px 10px;
-    margin: 10px 10px;
-}
-
-#navbar a:hover {
-    background-color: grey;
-}
-
-#theme-toggle {
-    font-family: 'Lucida Console', sans-serif;
-    color: white;
-    padding: 10px 10px;
-    margin: 10px 10px;
-    background-color: black;
-    border: white 2px solid;
-}
-
-#theme-toggle:hover {
-    background-color: grey;
-}
-
-.delete-btn {
-    font-family: 'Lucida Console', sans-serif;
-    color: white;
-    padding: 10px 10px;
-    margin: 10px 10px;
-    background-color: black;
-    border: white 2px solid;
-}
-
-.delete-btn:hover {
-    background-color: grey;
+    padding: 1em;
+    margin: 1em;
 }
 
 h1 {
-    font-size: 6em;
-}
-
-h1, h2, h3, h4, h5, h6 {
+    font-size: 4vw;
     font-family: 'Lucida Console', sans-serif;
     color: black;
     text-align: center;
-    padding: 10px 10px;
-    margin: 10px 10px;
+
+}
+
+h2, h3, h4, h5, h6 {
+    font-family: 'Lucida Console', sans-serif;
+    color: black;
+    text-align: center;
+    padding: 1em;
+    margin: 1em;
 }
 
 p {
     font-family: 'Lucida Console', sans-serif;
     color: black;
     text-align: center;
-    padding: 10px 10px;
-    margin: 10px 10px;
+    padding: 1em;
+    margin: 1em;
 }
 
-img {
-    width: 75%;
-    height: auto;
-    padding: 10px 10px;
-    margin: 10px 10px;
-}
-
-#form {
-    background-color: darkgrey;
+#sort a, #theme-toggle, .delete-btn, .like-btn, .submit-btn, .edit-btn {
     font-family: 'Lucida Console', sans-serif;
-    display: flex;
-    width: 50%;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    padding: 10px 10px;
-    margin: auto;
-}
-
-strong {
     color: white;
-}
-
-em {
-    color: white;
-}
-
-#mainbody {
-    background-color: darkgrey;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 1em;
+    margin: 1em;
     text-align: center;
-    width: 50%;
-    margin: auto;
-    padding: 10px 10px;
+    background-color: black;
+    border: white 2px solid;
 }
 
-iframe {
-    align-items: center;
-}
-
-table#recentposts {
-    width: 80%;
-    border-collapse: collapse;
-    margin: auto;
-    padding: 10px 10px;
-}
-
-table#salelog {
-    border: darkgrey 2px solid;
-    width: 80%;
-    border-collapse: collapse;
-    margin: auto;
-    padding: 10px 10px;
-}
-
-#salelog tr:nth-child(odd) {
+#navbar a:hover, #sort a:hover, #theme-toggle:hover, .delete-btn:hover, .like-btn:hover, .submit-btn:hover, .edit-btn:hover {
     background-color: grey;
 }
 
-.testimonial {
-    border: darkgrey 2px solid;
-    border-radius: 10px 10px 10px 10px;
-    padding: 10px 10px;
-    margin: 10px 10px;
+#form, #edit-tweet {
+    font-family: 'Lucida Console', sans-serif;
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    padding: 1em;
+    margin: auto;
 }
 
-#testimonialwrapper {
-    display: flex;
-    justify-content: space-between;
+#form input, #edit-tweet input {
+    font-family: 'Lucida Console', sans-serif;
+    text-align: center;
+    height: 2em;
+    margin: 1em;
+    padding: 1em;
+}
+
+#mainbody {
     width: 100%;
-}
-
-#testimonialL {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    width: 50%;
-    padding: 10px 10px;
-}
-
-#testimonialR {
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    width: 50%;
-    padding: 10px 10px;
-}
-
-.reviewer-name {
-    text-align: right;
-    font-style: oblique;
-}
-
-#sale-banner {
-    display: none;
-    background-color: darkgrey;
-    font-family: 'Lucida Console', sans-serif;
-    width: 50%;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    padding: 10px 10px;
+    padding: 1em;
     margin: auto;
 }
 
-#admin-sale-form {
-    background-color: darkgrey;
-    font-family: 'Lucida Console', sans-serif;
-    display: flex;
-    width: 10%;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    padding: 10px 10px;
-    margin: auto;
+table#recenttweets, table#populartweets, table#alltweets {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
 }

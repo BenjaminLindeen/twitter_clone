@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        title Tweet
+        include header.pug
+        include navbar.pug
+        h1 Tweet
+        #form
+            form(action='/tweet' method='post')
+                input(type='text', id='tweet', name='inputField', maxlength='14')
+                br
+                p#characters 14 Characters left
+                br
+                input.submit-btn(type='submit' value='Post Tweet')
