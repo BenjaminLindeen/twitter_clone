@@ -8,24 +8,22 @@ var connPool = mysql.createPool({
 });
 
 // the query string are done like this because my IDE doesn't like it as a single string.
-async function getTweet() {
-    const query = "SELECT *" + " FROM tweet ORDER BY date DESC";
-    return await connPool.awaitQuery(query);
+async function getTweet(sort, page, pageSize) {
+    const offset = (page - 1) * pageSize;
+    if (sort === "date") {
+        const query = "SELECT *" + " FROM tweet ORDER BY date DESC LIMIT ? OFFSET ?";
+        return await connPool.awaitQuery(query, [pageSize, offset]);
+    } else if (sort === "likes") {
+        const query = "SELECT *" + " FROM tweet ORDER BY likes DESC LIMIT ? OFFSET ?";
+        return await connPool.awaitQuery(query, [pageSize, offset]);
+    }
+    return null;
 }
 
 async function getNumberOfTweets() {
-    const query = "SELECT COUNT(*)" + " FROM tweet";
-    return await connPool.awaitQuery(query);
-}
-
-async function getRecentTweets() {
-    const query = "SELECT *" + " FROM tweet ORDER BY date DESC LIMIT 5";
-    return await connPool.awaitQuery(query);
-}
-
-async function getPopularTweets() {
-    const query = "SELECT *" + " FROM tweet ORDER BY likes DESC LIMIT 5";
-    return await connPool.awaitQuery(query);
+    const query = "SELECT COUNT(*)" + " AS total FROM tweet";
+    const result = await connPool.awaitQuery(query);
+    return result[0].total;
 }
 
 async function addTweet(tweet) {
@@ -51,4 +49,11 @@ async function deleteTweet(id) {
     return result.affectedRows > 0;
 }
 
-module.exports = {getTweet, getRecentTweets, getPopularTweets, addTweet, likeTweet, editTweet, deleteTweet, getNumberOfTweets}
+module.exports = {
+    getTweet,
+    getNumberOfTweets,
+    addTweet,
+    likeTweet,
+    editTweet,
+    deleteTweet,
+}

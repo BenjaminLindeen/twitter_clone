@@ -7,7 +7,7 @@ body {
     padding: 0;
 }
 
-#navbar{
+#navbar {
     background-color: black;
     display: flex;
     justify-content: space-between;
@@ -45,7 +45,7 @@ p {
     margin: 1em;
 }
 
-#sort a, #theme-toggle, .delete-btn, .like-btn, .submit-btn, .edit-btn {
+#sort a, #theme-toggle, .delete-btn, .like-btn, .submit-btn, .edit-btn, .prev-btn, .next-btn, .page {
     font-family: 'Lucida Console', sans-serif;
     color: white;
     padding: 1em;
@@ -55,7 +55,7 @@ p {
     border: white 2px solid;
 }
 
-#navbar a:hover, #sort a:hover, #theme-toggle:hover, .delete-btn:hover, .like-btn:hover, .submit-btn:hover, .edit-btn:hover {
+#navbar a:hover, #sort a:hover, #theme-toggle:hover, .delete-btn:hover, .like-btn:hover, .submit-btn:hover, .edit-btn:hover, prev-btn:hover, next-btn:hover, .page:hover {
     background-color: grey;
 }
 

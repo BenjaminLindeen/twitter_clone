@@ -1,13 +1,11 @@
 const express = require('express');
 const {
     getTweet,
-    getRecentTweets,
-    getPopularTweets,
+    getNumberOfTweets,
     addTweet,
     likeTweet,
     editTweet,
     deleteTweet,
-    getNumberOfTweets
 } = require('./database.js');
 const app = express();
 const bodyParser = require('body-parser');
@@ -30,73 +28,45 @@ app.get("/tweet", (req, res) => {
 
 app.get("/recenttweets", async (req, res) => {
     try {
+        const sort = "date"
+        const pageSize = 5;
         let currentPage = parseInt(req.query.page) || 1;
-        console.log(currentPage);
-        let limit = 5; // Number of tweets per page
-        let offset = (currentPage - 1) * limit;
-        console.log(offset);
-
-        // Query your database to get the total count of tweets
+        let recenttweets = await getTweet(sort, currentPage, pageSize);
         let totalTweets = await getNumberOfTweets();
-        let totalPages = Math.ceil(totalTweets / limit);
-
-        // Query to get tweets for the current page
-        const recenttweets = await getRecentTweets();
-
+        let totalPages = Math.ceil(totalTweets / pageSize);
 
         const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
         for (let i = 0; i < recenttweets.length; i++) {
             recenttweets[i].date = dateFormatter.format(recenttweets[i].date);
         }
 
-        res.render('recenttweets.pug', { recenttweets, currentPage, totalPages });
+        res.render('recenttweets.pug', {recenttweets, currentPage, totalPages});
     } catch (err) {
         console.error(err);
         res.status(500).send("Error retrieving recent posts");
     }
 });
 
-// app.get("/recenttweets", async (req, res) => {
-//     try {
-//         const recenttweets = await getRecentTweets();
-//         const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
-//         for (let i = 0; i < recenttweets.length; i++) {
-//             recenttweets[i].date = dateFormatter.format(recenttweets[i].date);
-//         }
-//         res.render("recenttweets.pug", {recenttweets});
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send("Error retrieving recent posts");
-//     }
-// });
+app.get("/populartweets", async (req, res) => {
+    try {
+        const sort = "likes"
+        const pageSize = 5;
+        let currentPage = parseInt(req.query.page) || 1;
+        let populartweets = await getTweet(sort, currentPage, pageSize);
+        let totalTweets = await getNumberOfTweets();
+        let totalPages = Math.ceil(totalTweets / pageSize);
 
-// app.get("/populartweets", async (req, res) => {
-//     try {
-//         const populartweets = await getPopularTweets();
-//         const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
-//         for (let i = 0; i < populartweets.length; i++) {
-//             populartweets[i].date = dateFormatter.format(populartweets[i].date);
-//         }
-//         res.render("populartweets.pug", {populartweets});
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send("Error retrieving popular posts");
-//     }
-// });
-//
-// app.get("/alltweets", async (req, res) => {
-//     try {
-//         const alltweets = await getTweet();
-//         const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
-//         for (let i = 0; i < alltweets.length; i++) {
-//             alltweets[i].date = dateFormatter.format(alltweets[i].date);
-//         }
-//         res.render("alltweets.pug", {alltweets});
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send("Error retrieving all posts");
-//     }
-// });
+        const dateFormatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+        for (let i = 0; i < populartweets.length; i++) {
+            populartweets[i].date = dateFormatter.format(populartweets[i].date);
+        }
+
+        res.render("populartweets.pug", {populartweets, currentPage, totalPages});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error retrieving popular posts");
+    }
+});
 
 app.post("/tweet", async (req, res) => {
     const formData = req.body;
