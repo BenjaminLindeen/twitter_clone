@@ -8,7 +8,6 @@ const {
     deleteTweet,
 } = require('./database.js');
 const app = express();
-const bodyParser = require('body-parser');
 const port = 4131;
 
 app.use(express.urlencoded({extended: true}));
