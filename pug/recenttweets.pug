@@ -5,7 +5,7 @@ html
         include header.pug
         include navbar.pug
         h1 Recent Tweets
-        include sort.pug
+        //include sort.pug
         br
         table#recenttweets
             tr
@@ -31,3 +31,11 @@ html
                         button.edit-btn(tweet-id=post.id) Edit
                     td
                         button.delete-btn(tweet-id=post.id) Delete
+        //Pagination controls
+        if totalPages > 1
+            .pagination
+                if currentPage > 1
+                    a(href=`?page=${currentPage - 1}`) Previous
+                span Current Page: #{currentPage}
+                if currentPage < totalPages
+                    a(href=`?page=${currentPage + 1}`) Next

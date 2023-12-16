@@ -13,6 +13,11 @@ async function getTweet() {
     return await connPool.awaitQuery(query);
 }
 
+async function getNumberOfTweets() {
+    const query = "SELECT COUNT(*)" + " FROM tweet";
+    return await connPool.awaitQuery(query);
+}
+
 async function getRecentTweets() {
     const query = "SELECT *" + " FROM tweet ORDER BY date DESC LIMIT 5";
     return await connPool.awaitQuery(query);
@@ -46,4 +51,4 @@ async function deleteTweet(id) {
     return result.affectedRows > 0;
 }
 
-module.exports = {getTweet, getRecentTweets, getPopularTweets, addTweet, likeTweet, editTweet, deleteTweet}
+module.exports = {getTweet, getRecentTweets, getPopularTweets, addTweet, likeTweet, editTweet, deleteTweet, getNumberOfTweets}
