@@ -11,8 +11,7 @@ application where users can post tweets, view recent tweets, and sort them based
 
 - **Home Page**: Provides information about the website.
 - **Post Tweet Page**: Allows users to post tweets with a maximum character length of 14.
-- **Recent Tweets Page**: Displays the five most recent tweets. Users can sort these tweets by the number of likes or
-  view all tweets on the website.
+- **Recent Tweets Page**: Displays the five most recent or most liked tweets per page. 
 - **Sitewite darkmode**: Users can toggle between light and dark mode.
 
 ## Setup
